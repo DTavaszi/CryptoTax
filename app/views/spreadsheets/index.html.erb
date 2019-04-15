@@ -1,0 +1,42 @@
+<h1>CSV Upload Page</h1>
+<br><br><br>
+<% flash[:notice] %>
+<table>
+	<thead>
+		<tr>
+			<th>Exchange &nbsp; </th>
+			<th>Type &nbsp; </th>
+			<th>Quantity &nbsp; </th>
+			<th>Price &nbsp; </th>
+			<th>CommissionPaid &nbsp; </th>
+			<th>Total&nbsp; </th>
+			<th>Opened &nbsp; </th>
+		</tr>
+	</thead>
+		<tbody>
+			<% @spreadsheets.each do |csv| %>
+				<tr>
+					<td><%= csv.exchange %> &nbsp;</td>
+					<td><%= csv.transactions %> &nbsp;</td>
+					<td><%= csv.quantity %> &nbsp;</td>
+					<td><%= csv.price %> &nbsp;</td>
+					<td><%= csv.commissionpaid %> &nbsp;</td>
+					<td><%= csv.total %> &nbsp;</td>
+					<td><%= csv.opened %> &nbsp;</td>
+					<td><%= link_to 'Destroy', csv, method: :delete, data: { confirm: 'Continue deletion?'} %></td>	
+				</tr>
+				<% end %>
+		</tbody>
+</table>
+<br><br><br>
+<%= link_to "Remove All", remove_all_spreadsheets_path, :method => :get %>
+
+<div><br/><br/><br/><br/><br/>
+	<h2>Import CSV below, USE TEST FILES PROVIDED FOR NOW</h2><br/>
+	<br/><br/>
+	<%= form_tag import_spreadsheets_path, multipart: true do %>
+		<%= file_field_tag :file %>
+		<%= submit_tag "Import Bittrex or Binance CSV" %>
+	<% end %>
+	<br/><br/>
+</div>

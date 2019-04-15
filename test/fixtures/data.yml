@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  spreadsheet: one
+  coin: MyString
+  transactiontype: 
+  quantity: MyString
+  fee: MyString
+  price: MyString
+  date: 2018-04-07 03:02:02
+
+two:
+  spreadsheet: two
+  coin: MyString
+  transactiontype: 
+  quantity: MyString
+  fee: MyString
+  price: MyString
+  date: 2018-04-07 03:02:02

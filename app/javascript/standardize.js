@@ -1,0 +1,134 @@
+import Filter from 'columnFilters'
+import moment from 'moment'
+import feeTypes from 'cryptocurrency/feeTypes'
+
+// Standardized output columns
+const OUTPUT_COLUMNS = ['coin', 'transactionType', 'quantity', 'fee', 'price', 'date']
+
+// Each exchange below has three constants:
+// Name
+// Original Columns
+// Columns used in standard output and the order
+
+// Binance
+const BINANCE = 'Binance'
+const BINANCE_COLUMNS = ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Fee', 'Fee Coin']
+const BINANCE_OUTPUT = ['Market', 'Type', 'Amount', 'Fee', 'Price', 'Date']
+const BINACE_FEETYPE = feeTypes.COIN
+
+// Bittrex
+const BITTREX = 'Bittrex'
+const BITTREX_COLUMNS = ['OrderUuid','Exchange', 'Type', 'Quantity', 'Limit', 'CommissionPaid', 'Price', 'Opened', 'Closed']
+const BITTREX_OUTPUT = ['Exchange', 'Type', 'Quantity', 'CommissionPaid', 'Price', 'Closed']
+const BITTREX_FEETYPE = feeTypes.VALUE
+
+// Exchanges can be accessed in this JSON Object
+const exchanges = {
+                    BINANCE: { input: BINANCE_COLUMNS, output: BINANCE_OUTPUT, feeType: BINACE_FEETYPE },
+                    BITTREX: { input: BITTREX_COLUMNS, output: BITTREX_OUTPUT, feeType: BITTREX_FEETYPE }
+                  }
+
+// Checks if the given keys match the keys in a given exchange
+function matchingRows(keys, exchange_key) {
+  var exchange_columns = exchanges[exchange_key]['input']
+
+  for (var i = 0; i < exchange_columns.length; i++) {
+    if (exchange_columns[i] != keys[i]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+// For every exchange available, check if the column length is equal
+// Then, check if the column names match
+function matchingExchange(keys) {
+  var exchange_keys = Object.keys(exchanges)
+
+  for (var i = 0; i < exchange_keys.length; i++) {
+    var curr_exchange_key = exchange_keys[i]
+    if (keys.length == exchanges[curr_exchange_key]['input'].length && matchingRows(keys, curr_exchange_key)) {
+      return curr_exchange_key
+    }
+  }
+
+  return null
+}
+
+// If all key values are null, then return true
+function isUndefined(object) {
+  var keys = Object.keys(object)
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i]
+    if (object[key] != null && object[key] != "" && key != 'feeType') {
+      return false
+    }
+  }
+
+  return true
+}
+
+// Check for rows containing undefined values, and remove
+function removeUndefined(object) {
+  for (var i = object.length - 1; i >= 0; i--) {
+    if (isUndefined(object[i])) {
+      object.pop(i)
+    }
+  }
+
+  return object
+}
+
+function filterColumns(object) {
+  for (var i = 0; i < object.length; i++) {
+    object[i].date = Filter.dateFormat(object[i].date)
+    object[i].coin = Filter.coinName(object[i].coin)
+    object[i].transactionType = Filter.transactionType(object[i].transactionType)
+    object[i].quantity = Filter.makeBig(object[i].quantity)
+    //price on binance = price per coin, price on bittrex = total amount
+    object[i].price = Filter.makeBig(object[i].price)
+    object[i].fee = Filter.makeBig(object[i].fee)
+  }
+
+  return object
+}
+
+function standardizeObject(object, exchange_key) {
+  var output = []
+  for (var i = 0; i < object.length; i++) {
+    var current = object[i]
+    var exchange_columns = exchanges[exchange_key]['output']
+    var row = {}
+
+    for (var j = 0; j < OUTPUT_COLUMNS.length; j++) {
+      row[OUTPUT_COLUMNS[j]] = current[exchange_columns[j]]
+    }
+
+    row.feeType = exchanges[exchange_key]['feeType']
+    output.push(row)
+  }
+
+  output = removeUndefined(output)
+  output = filterColumns(output)
+  return output
+}
+
+export default function (object) {
+  if (object.length == 0) {
+    return null
+  }
+
+  // Get object keys, and use it to find a matching exchange
+  var keys = Object.keys(object[0])
+  var exchange_key = matchingExchange(keys)
+
+  if (exchange_key != null) {
+    console.log('Found matching exchange: ' + exchange_key)
+    return standardizeObject(object, exchange_key)
+  } else {
+    // If no matching exchange found, return null
+    return null
+  }
+}

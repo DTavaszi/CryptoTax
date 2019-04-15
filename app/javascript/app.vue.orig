@@ -1,0 +1,91 @@
+<template>
+  <v-app>
+
+  <!-- Navigation Bar, excluding the drawer (only icon included) -->
+    <v-toolbar>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer">CryptoTax</router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat v-for="item in navbarItems" :to="item.link" :key="item.title">
+          {{ item.title }}
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+
+    <!-- This is where other components will be loaded -->
+    <main>
+      <router-view></router-view>
+    </main>
+    <!-- -->
+
+    <!-- ADD DRAWER BELOW IF YOU WANT TO -->
+
+  <!-- Footer -->
+    <v-footer height="auto" class="deep-purple darken-1">
+      <v-layout row wrap justify-center>
+        <v-btn color="white" flat v-for="row in rows" :to="row.link" :key="row.title">
+          {{ row.title }}
+        </v-btn>
+        <v-flex xs12 py-3 text-xs-center white--text>
+          &copy;2018 — <strong>CryptoTax</strong>
+        </v-flex>
+      </v-layout>
+    </v-footer>
+  </v-app>
+
+</template>
+
+<script>
+export default {
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn
+    },
+    navbarItems: function () {
+      var items = []
+
+      var login_items = [
+        { title: "Contact Us", link: "/contact" },
+        { title: "About Us", link: "/about" },
+        { title: "Login", link: "/login" },
+        { title: "Register", link: "/register"}
+      ]
+
+      var logout_items = [
+<<<<<<< HEAD
+        { title: "Dashboard", link: "/dashboard"},
+=======
+        { title: "Contact Us", link: "/contact" },
+        { title: "About Us", link: "/about" },
+>>>>>>> william_tasks
+        { title: "Logout", link: "/logout" }
+      ]
+
+      if (!this.isLoggedIn) {
+        items = items.concat(login_items)
+      } else {
+        items = items.concat(logout_items)
+      }
+
+      console.log(items)
+
+      return items
+    }
+  },
+  // Footer setup
+    data: () => ({
+      // Footer Vue Template https://vuetifyjs.com/en/components/footer
+      // icons: ['fab fa-facebook', 'fab fa-twitter', 'fab fa-google-plus', 'fab fa-linkedin', 'fab fa-instagram'],
+      rows: [
+        { title: 'Home', link:"/home" },
+        { title: 'About Us', link:"/about" },
+        { title: 'Contact Us', link:"/contact" }
+      ]
+    }),
+}
+</script>
+
+<style scoped>
+</style>

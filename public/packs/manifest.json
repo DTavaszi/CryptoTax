@@ -1,0 +1,13 @@
+{
+  "_/assets/images/SpreadsheetInterface.png": "/packs/_/assets/images/SpreadsheetInterface-d276f0b48948f3591daa09a3d69c1524.png",
+  "_/assets/images/binance-logo.png": "/packs/_/assets/images/binance-logo-f6a6db37c743c4b94a3c6c9291be61b3.png",
+  "_/assets/images/bittrex-logo.png": "/packs/_/assets/images/bittrex-logo-3a023618c22bb0a01c0487b3b0f230db.png",
+  "application.css": "/packs/application-d41d8cd98f00b204e9800998ecf8427e.css",
+  "application.css.map": "/packs/application-d41d8cd98f00b204e9800998ecf8427e.css.map",
+  "application.js": "/packs/application-e55ce740f87ec4416998.js",
+  "application.js.map": "/packs/application-e55ce740f87ec4416998.js.map",
+  "hello_vue.css": "/packs/hello_vue-d41d8cd98f00b204e9800998ecf8427e.css",
+  "hello_vue.css.map": "/packs/hello_vue-d41d8cd98f00b204e9800998ecf8427e.css.map",
+  "hello_vue.js": "/packs/hello_vue-44b0f6182a82f820e950.js",
+  "hello_vue.js.map": "/packs/hello_vue-44b0f6182a82f820e950.js.map"
+}
